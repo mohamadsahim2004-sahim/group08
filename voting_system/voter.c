@@ -81,3 +81,4 @@ void vote() {
 
     printf("Invalid candidate number.\n");
 }
+
