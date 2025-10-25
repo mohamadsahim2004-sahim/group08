@@ -3,7 +3,7 @@
 
 District districts[MAX_DISTRICTS];
 const char *district_names[MAX_DISTRICTS] = {"matara", "galle", "hambantota", "colombo", "kandy"};
-const char party_names[MAX_PARTIES] = {'A', 'B', 'C'};
+const char party_names[MAX_PARTIES] = {'A', 'B', 'C', 'D', 'E'};
 
 // Utility Functions
 int isValidNIC(const char *nic) {
@@ -16,7 +16,7 @@ int isValidNIC(const char *nic) {
         for (int i = 0; i < 9; i++)
             if (!isdigit(nic[i])) return 0;
         char last = toupper(nic[9]);
-        return (last == 'V' || last == 'X');
+        return (last == 'V');
     }
     return 0;
 }
@@ -49,7 +49,7 @@ int getPartyIndex(char party) {
 }
 
 int hasVoted(const char *nic) {
-    FILE *fv = fopen("voters.txt", "r");
+    FILE *fv = fopen("voter_details.txt", "r");
     if (!fv) return 0;
     char line[200];
     while (fgets(line, sizeof(line), fv))
@@ -62,7 +62,7 @@ int hasVoted(const char *nic) {
 }
 
 int isCandidateRegistered(const char *nic) {
-    FILE *fc = fopen("candidates.txt", "r");
+    FILE *fc = fopen("candidate_details.txt", "r");
     if (!fc) return 0;
     char line[200];
     while (fgets(line, sizeof(line), fc))
@@ -120,7 +120,7 @@ void registerCandidate() {
     printf("Enter your choice (1-5): ");
     scanf("%d", &district_choice);
 
-    printf("Choose your party (A, B, C): ");
+    printf("Choose your party (A, B, C, D, E): ");
     scanf(" %c", &party);
 
     int d = getDistrictIndex(district_choice);
@@ -137,7 +137,7 @@ void registerCandidate() {
             districts[d].parties[p][i].number = number;
             districts[d].parties[p][i].votes = 0;
 
-            FILE *fc = fopen("candidates.txt", "a");
+            FILE *fc = fopen("candidate_details.txt", "a");
             if (fc) {
                 fprintf(fc, "Name: %s | NIC: %s | District: %s | Party: %c | Candidate_No: %d | Age: %d\n",
                         name, nic, district_names[d], party_names[p], number, age);
