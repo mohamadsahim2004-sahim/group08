@@ -54,7 +54,7 @@ void vote() {
                 printf("%d. %s\t%02d \n", i + 1, districts[d].parties[p][i].name,
                                                 districts[d].parties[p][i].number);
             } else {
-                printf("%d. candidate\t00      00\n", i + 1);
+                printf("%d. candidate\t00  \n", i + 1);
             }
         }
         printf("\n");
