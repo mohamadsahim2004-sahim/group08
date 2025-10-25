@@ -1,4 +1,3 @@
-// election.h
 #ifndef ELECTION_H
 #define ELECTION_H
 
@@ -26,12 +25,11 @@ typedef struct {
     Candidate parties[MAX_PARTIES][MAX_CANDIDATES];
 } District;
 
-// --- Global Variables ---
 extern District districts[MAX_DISTRICTS];
 extern const char *district_names[MAX_DISTRICTS];
 extern const char party_names[MAX_PARTIES];
 
-// --- Shared Functions ---
+// --- Shared Utility Functions ---
 int isValidNIC(const char *nic);
 int getBirthYearFromNIC(const char *nic);
 int isUniqueCandidateNumber(int number);
@@ -40,7 +38,7 @@ int getPartyIndex(char party);
 int hasVoted(const char *nic);
 int isCandidateRegistered(const char *nic);
 
-// --- Functional Modules ---
+// --- Module Functions ---
 void registerCandidate();
 void vote();
 void showOfficials();

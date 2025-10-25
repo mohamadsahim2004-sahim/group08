@@ -14,7 +14,7 @@ void vote() {
 
     printf("Enter your name: ");
     scanf(" %[^\n]", name);
-    printf("Enter your NIC: ");
+    printf("Enter your 9(v) or 12 digit NIC: ");
     scanf("%s", nic);
 
     if (!isValidNIC(nic)) {
@@ -25,7 +25,7 @@ void vote() {
     int birth_year = getBirthYearFromNIC(nic);
     int calc_age = CURRENT_YEAR - birth_year;
     if (calc_age != age) {
-        printf("Age mismatch! Based on NIC, your age should be %d.\n", calc_age);
+        printf("Age did not match! Based on NIC, your age should be %d.\n", calc_age);
         return;
     }
 
@@ -48,14 +48,17 @@ void vote() {
 
     printf("\n__VOTE__\n");
     for (int p = 0; p < MAX_PARTIES; p++) {
-        printf("Party %c\n", party_names[p]);
+        printf("  Party %c  Cand_No  Votes\n\n", party_names[p]);
         for (int i = 0; i < MAX_CANDIDATES; i++) {
-            if (districts[d].parties[p][i].number != 0)
-                printf("%d. %s\t%d\n", i + 1, districts[d].parties[p][i].name,
-                       districts[d].parties[p][i].number);
+            if (districts[d].parties[p][i].number != 0) {
+                printf("%d. %s\t%02d \n", i + 1, districts[d].parties[p][i].name,
+                                                districts[d].parties[p][i].number);
+            } else {
+                printf("%d. candidate\t00      00\n", i + 1);
+            }
         }
+        printf("\n");
     }
-
     printf("Enter candidate number: ");
     scanf("%d", &vote_num);
 
@@ -64,7 +67,7 @@ void vote() {
             if (districts[d].parties[p][i].number == vote_num) {
                 districts[d].parties[p][i].votes++;
 
-                FILE *fv = fopen("voters.txt", "a");
+                FILE *fv = fopen("voter_details.txt", "a");
                 if (fv) {
                     fprintf(fv, "Name: %s | NIC: %s | District: %s | Age: %d\n",
                             name, nic, district_names[d], age);
