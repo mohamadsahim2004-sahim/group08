@@ -8,7 +8,7 @@
 
 #define MAX_CANDIDATES 5
 #define MAX_DISTRICTS 5
-#define MAX_PARTIES 3
+#define MAX_PARTIES 5
 #define MAX_NAME_LENGTH 20
 #define PASSWORD "official@1234"
 #define CURRENT_YEAR 2025
@@ -44,4 +44,3 @@ void vote();
 void showOfficials();
 
 #endif
-
