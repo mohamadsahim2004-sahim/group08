@@ -1,8 +1,11 @@
-// main.c
 #include "election.h"
 
 int main() {
+    loadCandidates();
+    loadVotes();
+
     int choice;
+
     while (1) {
         printf("\n--------------------------------------------------\n");
         printf("|      Welcome to the Election Voting System      |\n");
@@ -16,10 +19,14 @@ int main() {
         scanf("%d", &choice);
 
         switch (choice) {
-            case 1: vote(); break;
-            case 2: registerCandidate(); break;
-            case 3: showOfficials(); break;
-            case 4: printf("Exiting...\n"); return 0;
+            case 1: vote();
+             break;
+            case 2: registerCandidate();
+             break;
+            case 3: showOfficials();
+             break;
+            case 4: printf("Exiting...\n");
+             return 0;
             default: printf("Invalid choice!\n");
         }
     }

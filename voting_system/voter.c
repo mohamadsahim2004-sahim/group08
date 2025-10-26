@@ -1,5 +1,29 @@
-// vote.c
 #include "election.h"
+
+void loadVotes() {
+    FILE *fv = fopen("vote_details.txt", "r");
+    if (!fv) return;
+    char district_name[30];
+    char party;
+    int cand_no;
+
+    while (fscanf(fv, "%[^|]|%c|%d\n", district_name, &party, &cand_no) == 3) {
+        for (int d = 0; d < MAX_DISTRICTS; d++) {
+            if (strcmp(district_name, district_names[d]) == 0) {
+                int p = getPartyIndex(party);
+                if (p != -1) {
+                    for (int i = 0; i < MAX_CANDIDATES; i++) {
+                        if (districts[d].parties[p][i].number == cand_no) {
+                            districts[d].parties[p][i].votes++;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    fclose(fv);
+}
 
 void vote() {
     char name[MAX_NAME_LENGTH], nic[20];
@@ -14,7 +38,7 @@ void vote() {
 
     printf("Enter your name: ");
     scanf(" %[^\n]", name);
-    printf("Enter your 9(v) or 12 digit NIC: ");
+    printf("Enter your 9(V) or 12-digit NIC: ");
     scanf("%s", nic);
 
     if (!isValidNIC(nic)) {
@@ -47,18 +71,19 @@ void vote() {
     }
 
     printf("\n__VOTE__\n");
+    printf("     Ballot Paper\n\n");
+
     for (int p = 0; p < MAX_PARTIES; p++) {
-        printf("  Party %c  Cand_No  Votes\n\n", party_names[p]);
+        printf("  Party %c   Candidate No\n", party_names[p]);
         for (int i = 0; i < MAX_CANDIDATES; i++) {
-            if (districts[d].parties[p][i].number != 0) {
-                printf("%d. %s\t%02d \n", i + 1, districts[d].parties[p][i].name,
-                                                districts[d].parties[p][i].number);
-            } else {
-                printf("%d. candidate\t00  \n", i + 1);
-            }
+            if (districts[d].parties[p][i].number != 0)
+                printf("%d. %s \t%02d\n", i + 1, districts[d].parties[p][i].name, districts[d].parties[p][i].number);
+            else
+                printf("%d. candidate \t00\n", i + 1);
         }
         printf("\n");
     }
+
     printf("Enter candidate number: ");
     scanf("%d", &vote_num);
 
@@ -73,6 +98,7 @@ void vote() {
                             name, nic, district_names[d], age);
                     fclose(fv);
                 }
+
                 printf("Vote accepted!\n");
                 return;
             }

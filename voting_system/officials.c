@@ -2,7 +2,15 @@
 
 void showOfficials() {
     char password[30];
+    char username[30];
     int district_choice;
+    printf("Enter your username: ");
+    scanf("%s", username);
+
+    if (strcmp(username, USERNAME) != 0) {
+        printf("Incorrect username!\n");
+        return;
+    }
 
     printf("Enter your password: ");
     scanf("%s", password);

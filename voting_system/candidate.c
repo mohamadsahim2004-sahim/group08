@@ -1,4 +1,3 @@
-// candidate.c
 #include "election.h"
 
 District districts[MAX_DISTRICTS];
@@ -47,7 +46,6 @@ int getPartyIndex(char party) {
             return i;
     return -1;
 }
-
 int hasVoted(const char *nic) {
     FILE *fv = fopen("voter_details.txt", "r");
     if (!fv) return 0;
@@ -74,16 +72,73 @@ int isCandidateRegistered(const char *nic) {
     return 0;
 }
 
-// --- Candidate Registration Function ---
+// --- Load Candidates ---
+void loadCandidates() {
+    FILE *fc = fopen("candidate_details.txt", "r");
+    if (!fc) return;
+
+    char line[200];
+    while (fgets(line, sizeof(line), fc)) {
+        Candidate c;
+        char district_name[30];
+        char party_char;
+        int age;
+
+        if (sscanf(line, "Name: %[^|]| NIC: %[^|]| District: %[^|]| Party: %c | Candidate_No: %d | Age: %d",
+                   c.name, c.nic, district_name, &party_char, &c.number, &age) == 6) {
+
+            int d = getDistrictIndex(1); // default
+            for (int i = 0; i < MAX_DISTRICTS; i++)
+                if (strcmp(district_name, district_names[i]) == 0)
+                    d = i;
+
+            int p = getPartyIndex(party_char);
+            if (d != -1 && p != -1) {
+                for (int k = 0; k < MAX_CANDIDATES; k++) {
+                    if (districts[d].parties[p][k].number == 0) {
+                        strcpy(districts[d].parties[p][k].name, c.name);
+                        strcpy(districts[d].parties[p][k].nic, c.nic);
+                        districts[d].parties[p][k].number = c.number;
+                        districts[d].parties[p][k].votes = 0;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    fclose(fc);
+}
+
+// --- Candidate Registration ---
 void registerCandidate() {
+
+    char username1[30];
+    char password1[30];
+
     char name[MAX_NAME_LENGTH], nic[20], party;
     int number, district_choice, age;
 
     printf("\n_CANDIDATE REGISTER_\n");
+
+    printf("Enter your candidate username: ");
+    scanf("%s", username1);
+
+    if (strcmp(username1, USERNAME1) != 0) {
+        printf("Incorrect username!\n");
+        return;
+    }
+    printf("Enter your candidate password: ");
+    scanf("%s", password1);
+
+    if (strcmp(password1, PASSWORD1) != 0) {
+        printf("Incorrect password!\n");
+        return;
+    }
+
     printf("Enter your name: ");
     scanf(" %[^\n]", name);
 
-    printf("Enter your 10 or 12 digit NIC No: ");
+    printf("Enter your 9(v) or 12 digit NIC No: ");
     scanf("%s", nic);
     if (!isValidNIC(nic)) {
         printf("Invalid NIC format.\n");
@@ -95,7 +150,6 @@ void registerCandidate() {
 
     int birth_year = getBirthYearFromNIC(nic);
     int calc_age = CURRENT_YEAR - birth_year;
-
     if (calc_age != age) {
         printf("Age mismatch! Based on NIC, your age should be %d.\n", calc_age);
         return;

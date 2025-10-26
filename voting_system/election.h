@@ -10,7 +10,10 @@
 #define MAX_DISTRICTS 5
 #define MAX_PARTIES 5
 #define MAX_NAME_LENGTH 20
+#define USERNAME "official" 
 #define PASSWORD "official@1234"
+#define USERNAME1 "candidate" 
+#define PASSWORD1 "candidate@1234"
 #define CURRENT_YEAR 2025
 
 // --- Data Structures ---
@@ -25,11 +28,12 @@ typedef struct {
     Candidate parties[MAX_PARTIES][MAX_CANDIDATES];
 } District;
 
+// --- Globals ---
 extern District districts[MAX_DISTRICTS];
 extern const char *district_names[MAX_DISTRICTS];
 extern const char party_names[MAX_PARTIES];
 
-// --- Shared Utility Functions ---
+// --- Utility Functions ---
 int isValidNIC(const char *nic);
 int getBirthYearFromNIC(const char *nic);
 int isUniqueCandidateNumber(int number);
@@ -38,9 +42,11 @@ int getPartyIndex(char party);
 int hasVoted(const char *nic);
 int isCandidateRegistered(const char *nic);
 
-// --- Module Functions ---
+// --- Core Functions ---
 void registerCandidate();
 void vote();
 void showOfficials();
+void loadCandidates();
+void loadVotes();
 
 #endif
