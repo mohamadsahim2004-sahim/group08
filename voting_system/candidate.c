@@ -205,3 +205,4 @@ void registerCandidate() {
 
     printf("No more slots available for this party in the district.\n");
 }
+
